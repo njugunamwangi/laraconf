@@ -9,6 +9,7 @@ use App\Models\Conference;
 use Filament\Forms;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -29,16 +30,6 @@ class ConferenceResource extends Resource
                     ->label('Conference Name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Select::make('venue_id')
-                    ->relationship('venue', 'name'),
-                Forms\Components\RichEditor::make('description')
-                    ->columnSpanFull()
-                    ->label('Conference Description')
-                    ->required(),
-                Forms\Components\DateTimePicker::make('start_date')
-                    ->required(),
-                Forms\Components\DateTimePicker::make('end_date')
-                    ->required(),
                 Forms\Components\Select::make('status')
                     ->required()
                     ->searchable()
@@ -47,10 +38,23 @@ class ConferenceResource extends Resource
                         'Published' => 'Published',
                         'Waiting' => 'Waiting',
                     ]),
+                Forms\Components\RichEditor::make('description')
+                    ->columnSpanFull()
+                    ->label('Conference Description')
+                    ->required(),
+                Forms\Components\DateTimePicker::make('start_date')
+                    ->required(),
+                Forms\Components\DateTimePicker::make('end_date')
+                    ->required(),
                 Forms\Components\Select::make('region')
+                    ->live()
                     ->enum(Region::class)
                     ->searchable()
                     ->options(Region::class),
+                Forms\Components\Select::make('venue_id')
+                    ->relationship('venue', 'name', modifyQueryUsing: function(Builder $query, Get $get) {
+                        return $query->where('region', $get('region'));
+                    }),
                 Toggle::make('is_published')
             ]);
     }
