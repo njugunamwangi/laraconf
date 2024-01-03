@@ -22,22 +22,7 @@ class SpeakerResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('email')
-                    ->email()
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\Textarea::make('bio')
-                    ->required()
-                    ->maxLength(65535)
-                    ->columnSpanFull(),
-                Forms\Components\TextInput::make('twitter_handle')
-                    ->required()
-                    ->maxLength(255),
-            ]);
+            ->schema(Speaker::getForm());
     }
 
     public static function table(Table $table): Table
