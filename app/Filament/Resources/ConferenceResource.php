@@ -29,50 +29,7 @@ class ConferenceResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->label('Conference Name')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\Select::make('status')
-                    ->required()
-                    ->searchable()
-                    ->options([
-                        'Draft' => 'Draft',
-                        'Published' => 'Published',
-                        'Waiting' => 'Waiting',
-                    ]),
-                Forms\Components\RichEditor::make('description')
-                    ->columnSpanFull()
-                    ->label('Conference Description')
-                    ->required(),
-                Forms\Components\DateTimePicker::make('start_date')
-                    ->required(),
-                Forms\Components\DateTimePicker::make('end_date')
-                    ->required(),
-                Forms\Components\Select::make('region')
-                    ->live()
-                    ->enum(Region::class)
-                    ->searchable()
-                    ->options(Region::class),
-                Forms\Components\Select::make('venue_id')
-                    ->searchable()
-                    ->preload()
-                    ->createOptionForm(Venue::getForm())
-                    ->editOptionForm(Venue::getForm())
-                    ->relationship('venue', 'name', modifyQueryUsing: function(Builder $query, Get $get) {
-                        return $query->where('region', $get('region'));
-                    }),
-                CheckboxList::make('speakers')
-                    ->relationship('speakers', 'name')
-                    ->columnSpanFull()
-                    ->searchable()
-                    ->options(
-                        Speaker::all()->pluck('name', 'id')
-                    )
-                    ->columns(3),
-                Toggle::make('is_published')
-            ]);
+            ->schema(Conference::getForm());
     }
 
     public static function table(Table $table): Table
