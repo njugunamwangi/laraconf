@@ -52,6 +52,8 @@ class ConferenceResource extends Resource
                     ->searchable()
                     ->options(Region::class),
                 Forms\Components\Select::make('venue_id')
+                    ->searchable()
+                    ->preload()
                     ->relationship('venue', 'name', modifyQueryUsing: function(Builder $query, Get $get) {
                         return $query->where('region', $get('region'));
                     }),
