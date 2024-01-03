@@ -39,8 +39,7 @@ class ConferenceResource extends Resource
                 Forms\Components\TextInput::make('region')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Select::make('venue_id')
-                    ->relationship('venue', 'name'),
+                Toggle::make('is_published')
             ]);
     }
 
