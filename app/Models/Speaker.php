@@ -34,6 +34,11 @@ class Speaker extends Model
         return [
             Section::make('Contact Information')
                 ->schema([
+                    FileUpload::make('avatar')
+                        ->avatar()
+                        ->directory('avatars')
+                        ->imageEditor()
+                        ->columnSpanFull(),
                     TextInput::make('name')
                         ->required()
                         ->maxLength(255),
