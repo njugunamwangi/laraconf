@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Filament\Forms\Components\CheckboxList;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -48,13 +49,11 @@ class Speaker extends Model
                         ->maxLength(255),
                     TextInput::make('twitter_handle')
                         ->columnSpanFull()
-                        ->required()
                         ->maxLength(255),
                 ])->columns(2),
             Section::make('Bio & Qualifications')
                 ->schema([
                     RichEditor::make('bio')
-                        ->required()
                         ->maxLength(65535)
                         ->columnSpanFull(),
                     CheckboxList::make('qualifications')
