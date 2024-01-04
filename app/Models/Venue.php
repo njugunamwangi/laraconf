@@ -5,14 +5,18 @@ namespace App\Models;
 use App\Enums\Region;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Venue extends Model
+class Venue extends Model implements HasMedia
 {
     use HasFactory;
+    use InteractsWithMedia;
 
     /**
      * The attributes that should be cast to native types.
@@ -51,7 +55,13 @@ class Venue extends Model
                     Select::make('region')
                         ->enum(Region::class)
                         ->options(Region::class),
-                ])->columns(2)
+                ])->columns(2),
+            Section::make('Venue Images')
+                ->schema([
+                    SpatieMediaLibraryFileUpload::make('images')
+                        ->collection('venue-images')
+                        ->multiple()
+                ])
         ];
     }
 }
