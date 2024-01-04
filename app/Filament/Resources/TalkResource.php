@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\TalkLength;
 use App\Filament\Resources\TalkResource\Pages;
 use App\Filament\Resources\TalkResource\RelationManagers;
 use App\Models\Talk;
@@ -9,9 +10,14 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Str;
 
 class TalkResource extends Resource
 {
@@ -41,10 +47,32 @@ class TalkResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('title')
-                    ->searchable(),
+                    ->searchable()
+                    ->description(function(Talk $record) {
+                        return Str::of($record->abstract)->limit(40);
+                    }),
+                ImageColumn::make('speaker.avatar')
+                    ->label('Avatar')
+                    ->circular()
+                    ->defaultImageUrl(function ($record) {
+                        return 'https://ui-avatars.com/api/?background=random&name=' . urlencode($record->speaker->name);
+                    }),
                 Tables\Columns\TextColumn::make('speaker.name')
-                    ->numeric()
                     ->sortable(),
+                ToggleColumn::make('new_talk'),
+                TextColumn::make('status')
+                    ->badge()
+                    ->color(function($state) {
+                        return $state->getColor();
+                    }),
+                IconColumn::make('length')
+                    ->icon(function ($state) {
+                        return match($state) {
+                            TalkLength::LIGHTNING => 'heroicon-o-bolt',
+                            TalkLength::NORMAL => 'heroicon-o-megaphone',
+                            TalkLength::KEYNOTE => 'heroicon-o-key',
+                        };
+                    }),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
