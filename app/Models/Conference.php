@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Region;
+use App\Enums\Status;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\RichEditor;
@@ -57,11 +58,8 @@ class Conference extends Model
             Select::make('status')
                 ->required()
                 ->searchable()
-                ->options([
-                    'Draft' => 'Draft',
-                    'Published' => 'Published',
-                    'Waiting' => 'Waiting',
-                ]),
+                ->enum(Status::class)
+                ->options(Status::class),
             RichEditor::make('description')
                 ->columnSpanFull()
                 ->label('Conference Description')
