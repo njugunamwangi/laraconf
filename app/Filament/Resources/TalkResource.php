@@ -122,6 +122,20 @@ class TalkResource extends Resource
                             ->title('Talk Approved')
                             ->send();
                     }),
+                Action::make('reject')
+                    ->icon('heroicon-o-hand-thumb-down')
+                    ->color('danger')
+                    ->requiresConfirmation()
+                    ->action(function(Talk $record) {
+                        $record->reject();
+                    })
+                    ->after(function() {
+                        Notification::make()
+                            ->duration(1000)
+                            ->danger()
+                            ->title('Talk Rejected')
+                            ->send();
+                    }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

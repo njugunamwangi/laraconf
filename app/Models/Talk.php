@@ -39,4 +39,9 @@ class Talk extends Model
         $this->status = TalkStatus::APPROVED;
         $this->save();
     }
+
+    public function reject() {
+        $this->status = TalkStatus::REJECTED;
+        $this->save();
+    }
 }
