@@ -105,7 +105,8 @@ class TalkResource extends Resource
                     })
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->slideOver(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -126,7 +127,7 @@ class TalkResource extends Resource
         return [
             'index' => Pages\ListTalks::route('/'),
             'create' => Pages\CreateTalk::route('/create'),
-            'edit' => Pages\EditTalk::route('/{record}/edit'),
+            // 'edit' => Pages\EditTalk::route('/{record}/edit'),
         ];
     }
 }
