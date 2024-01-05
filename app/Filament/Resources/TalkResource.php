@@ -12,6 +12,7 @@ use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -109,33 +110,36 @@ class TalkResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make()
                     ->slideOver(),
-                Action::make('approve')
-                    ->icon('heroicon-o-check-circle')
-                    ->color('success')
-                    ->action(function(Talk $record) {
-                        $record->approve();
-                    })
-                    ->after(function() {
-                        Notification::make()
-                            ->duration(1000)
-                            ->success()
-                            ->title('Talk Approved')
-                            ->send();
-                    }),
-                Action::make('reject')
-                    ->icon('heroicon-o-hand-thumb-down')
-                    ->color('danger')
-                    ->requiresConfirmation()
-                    ->action(function(Talk $record) {
-                        $record->reject();
-                    })
-                    ->after(function() {
-                        Notification::make()
-                            ->duration(1000)
-                            ->danger()
-                            ->title('Talk Rejected')
-                            ->send();
-                    }),
+                ActionGroup::make([
+                    Action::make('approve')
+                        ->icon('heroicon-o-check-circle')
+                        ->color('success')
+                        ->action(function(Talk $record) {
+                            $record->approve();
+                        })
+                        ->after(function() {
+                            Notification::make()
+                                ->duration(1000)
+                                ->success()
+                                ->title('Talk Approved')
+                                ->send();
+                        }),
+                    Action::make('reject')
+                        ->icon('heroicon-o-hand-thumb-down')
+                        ->color('danger')
+                        ->requiresConfirmation()
+                        ->action(function(Talk $record) {
+                            $record->reject();
+                        })
+                        ->after(function() {
+                            Notification::make()
+                                ->duration(1000)
+                                ->danger()
+                                ->title('Talk Rejected')
+                                ->send();
+                        }),
+                ])
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
