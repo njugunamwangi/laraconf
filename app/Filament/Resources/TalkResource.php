@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Enums\TalkLength;
+use App\Enums\TalkStatus;
 use App\Filament\Resources\TalkResource\Pages;
 use App\Filament\Resources\TalkResource\RelationManagers;
 use App\Models\Talk;
@@ -114,6 +115,9 @@ class TalkResource extends Resource
                     Action::make('approve')
                         ->icon('heroicon-o-check-circle')
                         ->color('success')
+                        ->visible(function($record) {
+                            return $record->status === (TalkStatus::SUBMITTED);
+                        })
                         ->action(function(Talk $record) {
                             $record->approve();
                         })
@@ -127,6 +131,9 @@ class TalkResource extends Resource
                     Action::make('reject')
                         ->icon('heroicon-o-hand-thumb-down')
                         ->color('danger')
+                        ->visible(function($record) {
+                            return $record->status === (TalkStatus::SUBMITTED);
+                        })
                         ->requiresConfirmation()
                         ->action(function(Talk $record) {
                             $record->reject();
