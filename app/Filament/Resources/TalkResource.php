@@ -8,8 +8,10 @@ use App\Filament\Resources\TalkResource\RelationManagers;
 use App\Models\Talk;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -107,6 +109,19 @@ class TalkResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make()
                     ->slideOver(),
+                Action::make('approve')
+                    ->icon('heroicon-o-check-circle')
+                    ->color('success')
+                    ->action(function(Talk $record) {
+                        $record->approve();
+                    })
+                    ->after(function() {
+                        Notification::make()
+                            ->duration(1000)
+                            ->success()
+                            ->title('Talk Approved')
+                            ->send();
+                    }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
