@@ -104,7 +104,7 @@ class TalkResource extends Resource
                     ->slideOver(),
                 ActionGroup::make([
                     Action::make('approve')
-                        ->icon('heroicon-o-check-circle')
+                        ->icon('heroicon-o-hand-thumb-up')
                         ->color('success')
                         ->visible(function($record) {
                             return $record->status === (TalkStatus::SUBMITTED);
