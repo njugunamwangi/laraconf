@@ -49,6 +49,9 @@ class TalkResource extends Resource
     {
         return $table
             ->persistFiltersInSession()
+            ->filtersTriggerAction(function ($action) {
+                return $action->button()->label('Filters');
+            })
             ->columns([
                 Tables\Columns\TextColumn::make('title')
                     ->searchable()
